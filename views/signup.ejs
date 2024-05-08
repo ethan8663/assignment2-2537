@@ -21,7 +21,7 @@
   </div>
 
   <% if (typeof hasUser === 'undefined' && typeof isUnique === 'undefined') { %>
-    <p>executed</p>
+    <!-- <p>executed</p> -->
     <% } else if (typeof isUnique === 'undefined' && !hasUser){ %>    
       <p>No user found with given email and password. Sign up first.</p>
     <% } else if (typeof hasUser === 'undefined' && !isUnique) {%>

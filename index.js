@@ -8,7 +8,7 @@ const UserModel = require('./models/User');
 const mongoURI = process.env.MONGO_URI
 const bcrypt = require('bcryptjs');
 const Joi = require("joi");
-// console.log(process.env.SESSION_SECRET);
+// console.log(mongoURI);
 
 mongoose.connect(mongoURI)
 .then(res => {
