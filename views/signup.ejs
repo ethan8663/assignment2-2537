@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | Node Auth</title>
+</head>
+
+<body>
+
+
+
+  <form action="/signup" method="POST">
+    create user
+    <div><input type="text" name="username" placeholder="username" /></div>
+    <div><input type="email" name="email" placeholder="email" /></div>
+    <div><input type="password" name="password" placeholder="password" /></div>
+    <button>Submit</button>
+  </form>
+  </div>
+
+  <% if (typeof hasUser === 'undefined' && typeof isUnique === 'undefined') { %>
+    <p>executed</p>
+    <% } else if (typeof isUnique === 'undefined' && !hasUser){ %>    
+      <p>No user found with given email and password. Sign up first.</p>
+    <% } else if (typeof hasUser === 'undefined' && !isUnique) {%>
+      <p>Account already exist</p>
+      <% } %>
+</body>
+
+</html>

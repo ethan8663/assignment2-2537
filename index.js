@@ -7,6 +7,7 @@ const app = express();
 const UserModel = require('./models/User');
 const mongoURI = process.env.MONGO_URI
 const bcrypt = require('bcryptjs');
+const Joi = require("joi");
 // console.log(process.env.SESSION_SECRET);
 
 mongoose.connect(mongoURI)
@@ -21,6 +22,7 @@ const store = new MongoDBSession({
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/public"));
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -39,24 +41,43 @@ if (req.session.isAuth) {
 }
 
 app.get('/', (req, res) => {
-    // console.log(req.session.id);
-    req.session.isAuth = true;
-    res.send('hello world');
+    if (req.session && req.session.user) {
+        // User is logged in
+        const username = req.session.user.username;
+        res.render('landing', { username, loggedIn: true });
+    } else {
+        // User is not logged in
+        res.render('landing', { loggedIn: false });
+    }
 });
-app.get('/landing', (req, res) => {
-    res.render('landing')
+
+app.get('/signup', (req, res) => {
+    res.render("signup")
 })
-app.get('/register', (req, res) => {
-    res.render("register")
-})
-app.post('/register', async (req, res) => {
+app.post('/signup', async (req, res) => {
+    // console.log('this is start of signup');
     const { username, email, password } = req.body;
+
+
+    const schema = Joi.object({
+        username: Joi.string().alphanum().max(20).required(),
+        password: Joi.string().max(20).required(),
+        email: Joi.string().email().required()
+    });
+
+    const validationResult = schema.validate({username, password, email});
+
+	if (validationResult.error) {
+        const errors = validationResult.error.details.map(error => error.message);
+        return res.render('signupSubmit', { errors });
+    }
+
     // This line queries the database to find a user with the specified email. It uses the findOne() method of the UserModel to find a user document that matches the given email.
     let user = await UserModel.findOne({email});
 
     // If a user with the specified email already exists in the database, the code redirects the user to the /register page. This implies that the email is already registered, and the user should choose a different email.
     if (user) {
-        return res.redirect('/register');
+        return res.render('signup', { isUnique: false });
     }
 
     const hashedPsw = await bcrypt.hash(password, 12);
@@ -81,28 +102,60 @@ app.post('/login', async (req, res) => {
     const user = await UserModel.findOne({email});
 
     if (!user) {
-        return res.redirect('/login');
+        return res.render('signup', { hasUser: false });
 
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-        return res.redirect('/login');
+        return res.render('login', { isMatch: false });
     }
     req.session.isAuth = true;
-    res.redirect('/dashboard')
+    req.session.username = user.username;
+
+    res.render('landing', { username: user.username, loggedIn: true });
 })
 
-app.get('/dashboard', isAuth, (req, res) => {
-    res.render("dashboard")
+app.get('/landing', isAuth, (req, res) => {
+    const username = req.session.user.username;
+    res.render('landing', { username, loggedIn: true });
 })
 
-app.post('/logout', (req, res) => {
+app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) throw err;
         res.redirect('/');
     })
+})
+
+app.get('/signupSubmit', (req, res) => {
+    res.render("signupSubmit")
+})
+
+app.get('/members', (req, res) => {
+    if (!req.session.isAuth) {
+        res.redirect('/login');
+        return;
+    }
+    const username = req.session.username;
+    // console.log(req.session.username);
+    let randomNumber = Math.floor(Math.random() * 3);
+    let path;
+    switch (randomNumber) {
+        case 0: path = '/fluffy.gif'
+        break;
+        case 1 : path = "/socks.gif"
+        break;
+        case 2: path = '/stretch.gif'
+        break;
+
+    }
+    res.render("members", {username, path})
+})
+
+app.get('*', (req, res) => {
+    res.status(404).render("notFound")
 })
 app.listen(3000, () => {
     console.log('listening');
