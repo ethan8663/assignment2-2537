@@ -1,28 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>login</title>
-</head>
-
-<body>
+<%- include("templates/header") %>
   <form action="/login" method="POST">
-    log in
-    <div><input type="email" name="email" placeholder="email" /></div>
-    <div><input type="password" name="password" placeholder="password" /></div>    
-    <button>Submit</button>
+
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <%- include("templates/input", {input: "email" }) %>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <%- include("templates/input", {input: "password" }) %>
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </div>
   </form>
-  
 
-  <% if (typeof isMatch === 'undefined') { %>
-    
-<% } else { %>    
-    <p>Invalid email and password combination.</p>
-<% } %>
+  <% if (typeof isMatch==='undefined' && typeof isAdmin==='undefined' ) { %>
+
+    <!-- this isMatch undefined should be added for some reason -->
+    <% } else if (typeof isMatch !== 'undefined' && !isMatch){ %>
+      <p>Invalid email and password combination.</p>
+      <% } else if (!isAdmin) {%>
+        <p>You are not admin</p>
+        <% } %>
 
 
-</body>
-
-</html>
+          <%- include("templates/footer") %>

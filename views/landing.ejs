@@ -1,19 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>landing</title>    
-  </head>
-  <body>
+<%- include("templates/header") %>
     <% if (loggedIn) { %>
       <p>Hello, <%= username %>!</p>
-      <a href="/logout"><button>Log out</button></a>
-      <a href="/members"><button>Go to Member Area</button></a>
+      <div class="d-flex gap-2 justify-content-center py-5">
+        <a href="/logout"><button class="btn btn-warning rounded-pill px-3" type="button">Log out</button></a>
+        <a href="/members"><button class="btn btn-success rounded-pill px-3" type="button">Go to members area</button></a>
+        </div>
   <% } else { %>
-      <a href="/signup"><button>Sign up</button></a>
-      <a href="/login"><button>Log in</button></a>
+    <div class="d-flex gap-2 justify-content-center py-5">
+      <a href="/signup"><button class="btn btn-primary rounded-pill px-3" type="button">Sign up</button></a>
+      <a href="/login"><button class="btn btn-secondary rounded-pill px-3" type="button">Log in</button></a>
+      </div>
   <% } %>
   
-  </body>
-</html>
+  <!-- <div class="d-flex gap-2 justify-content-center py-5">
+    <button class="btn btn-primary rounded-pill px-3" type="button">Primary</button>
+    <button class="btn btn-secondary rounded-pill px-3" type="button">Secondary</button>
+    <button class="btn btn-success rounded-pill px-3" type="button">Success</button>
+    <button class="btn btn-danger rounded-pill px-3" type="button">Danger</button>
+    <button class="btn btn-warning rounded-pill px-3" type="button">Warning</button>
+    <button class="btn btn-info rounded-pill px-3" type="button">Info</button>
+    <button class="btn btn-light rounded-pill px-3" type="button">Light</button>
+    <button class="btn btn-dark rounded-pill px-3" type="button">Dark</button>
+    <button class="btn btn-link rounded-pill px-3" type="button">Link</button>
+  </div> -->
+
+<%- include("templates/footer") %>

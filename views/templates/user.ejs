@@ -1,0 +1,10 @@
+<div>
+    <form action="/admin" method="post">
+        <%=user.username%>
+            (<%= user.isAdmin ? 'admin' : 'user' %>)
+                <input type="hidden" name="username" value="<%= user.username %>">
+                <button class="btn btn-danger rounded-pill px-3" name="promote">Promote to Admin</button>
+                <button class="btn btn-warning rounded-pill px-3" name="demote">Demote to User</button>
+    </form>
+
+</div>

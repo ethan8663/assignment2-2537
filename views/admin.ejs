@@ -1,0 +1,10 @@
+<%- include("templates/header") %>
+<h1>Users</h1>
+<% if (typeof msg === 'undefined') { %>
+    <% for(let i = 0; i < users.length; i++) { %>
+        <%- include("templates/user", { user : users[i] }) %>
+        <% } %>
+<% } else { %>
+   <div> <%=msg%> </div> 
+<% } %>
+<%- include("templates/footer") %>

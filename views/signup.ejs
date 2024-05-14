@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register | Node Auth</title>
-</head>
-
-<body>
+<%- include("templates/header") %>
 
 
 
   <form action="/signup" method="POST">
     create user
-    <div><input type="text" name="username" placeholder="username" /></div>
-    <div><input type="email" name="email" placeholder="email" /></div>
-    <div><input type="password" name="password" placeholder="password" /></div>
-    <button>Submit</button>
+    <%- include("templates/input", {type: "text", input: "username"}) %>  
+    <%- include("templates/input", {input: "email"}) %>  
+    <%- include("templates/input", {input: "password"}) %>  
+    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
   </div>
 
@@ -27,6 +18,4 @@
     <% } else if (typeof hasUser === 'undefined' && !isUnique) {%>
       <p>Account already exist</p>
       <% } %>
-</body>
-
-</html>
+      <%- include("templates/footer") %>
