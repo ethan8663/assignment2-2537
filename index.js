@@ -91,46 +91,49 @@ app.get('/', (req, res) => {
     }
 });
 
-app.get('/signup', (req, res) => {
-    res.render("signup")
-})
-app.post('/signup', async (req, res) => {
-    // console.log('this is start of signup');
-    const { username, email, password } = req.body;
+const signupRouter = require('./routes/signup')
+app.use('/signup', signupRouter)
+
+// app.get('/signup', (req, res) => {
+//     res.render("signup")
+// })
+// app.post('/signup', async (req, res) => {
+//     // console.log('this is start of signup');
+//     const { username, email, password } = req.body;
 
 
-    const schema = Joi.object({
-        username: Joi.string().alphanum().max(20).required(),
-        password: Joi.string().max(20).required(),
-        email: Joi.string().email().required()
-    });
+//     const schema = Joi.object({
+//         username: Joi.string().alphanum().max(20).required(),
+//         password: Joi.string().max(20).required(),
+//         email: Joi.string().email().required()
+//     });
 
-    const validationResult = schema.validate({ username, password, email });
+//     const validationResult = schema.validate({ username, password, email });
 
-    if (validationResult.error) {
-        const errors = validationResult.error.details.map(error => error.message);
-        return res.render('signupSubmit', { errors });
-    }
+//     if (validationResult.error) {
+//         const errors = validationResult.error.details.map(error => error.message);
+//         return res.render('signupSubmit', { errors });
+//     }
 
-    // This line queries the database to find a user with the specified email. It uses the findOne() method of the UserModel to find a user document that matches the given email.
-    let user = await UserModel.findOne({ email });
+//     // This line queries the database to find a user with the specified email. It uses the findOne() method of the UserModel to find a user document that matches the given email.
+//     let user = await UserModel.findOne({ email });
 
-    // If a user with the specified email already exists in the database, the code redirects the user to the /register page. This implies that the email is already registered, and the user should choose a different email.
-    if (user) {
-        return res.render('signup', { isUnique: false });
-    }
+//     // If a user with the specified email already exists in the database, the code redirects the user to the /register page. This implies that the email is already registered, and the user should choose a different email.
+//     if (user) {
+//         return res.render('signup', { isUnique: false });
+//     }
 
-    const hashedPsw = await bcrypt.hash(password, 12);
-    user = new UserModel({
-        username,
-        email,
-        password: hashedPsw
-    });
+//     const hashedPsw = await bcrypt.hash(password, 12);
+//     user = new UserModel({
+//         username,
+//         email,
+//         password: hashedPsw
+//     });
 
-    await user.save();
+//     await user.save();
 
-    res.redirect('/login')
-})
+//     res.redirect('/login')
+// })
 
 app.get('/login', (req, res) => {
     res.render("login");
@@ -227,6 +230,9 @@ app.post('/admin', async(req, res) => {
     console.log(selectedUser);
     res.render("admin", {msg: `${name} is modified`})
 })
+
+const commentRoute = require('./routes/comment')
+app.use('/comment', commentRoute)
 app.get('*', (req, res) => {
     res.status(404).render("notFound")
 })
