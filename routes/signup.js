@@ -10,6 +10,9 @@ app.use(path, __router)
 */
 
 const express = require('express')
+const Joi = require("joi");
+const UserModel = require('../models/User');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 
 router.get('/', (req, res) => {
